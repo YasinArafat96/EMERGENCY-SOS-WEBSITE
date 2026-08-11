@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-sos-dark text-white;
+  }
+
+  /* Make <select> dropdown options readable on any background */
+  select {
+    color-scheme: dark;
+  }
+  select option {
+    background-color: #1e1e30;
+    color: #ffffff;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20;
+  }
+  
+  .sos-button {
+    @apply bg-sos-red hover:bg-red-700 transition-all duration-300 
+           text-white font-bold py-3 px-6 rounded-full shadow-lg
+           hover:shadow-red-500/50 transform hover:scale-105;
+  }
+  
+  .sos-button-active {
+    @apply bg-gray-500 hover:bg-gray-600 transition-all duration-300 
+           text-white font-bold py-3 px-6 rounded-full shadow-lg;
+  }
+}
