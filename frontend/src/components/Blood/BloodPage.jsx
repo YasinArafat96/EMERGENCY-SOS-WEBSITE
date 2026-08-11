@@ -25,7 +25,7 @@ const BloodPage = () => {
       const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/blood/requests`);
       setRequests(data);
     } catch (error) {
-      console.error('Error fetching requests:', error);
+      console.error('Error fetching requests:', error); 
     }
   };
 
@@ -49,7 +49,7 @@ const BloodPage = () => {
       setDonatedRequests(prev => [...prev, requestId]);
       toast.success('Thank you for donating blood! ❤️');
     } catch (error) {
-      toast.error('Failed to process donation');
+      toast.error('Failed to process donation'); 
     }
   };
 
