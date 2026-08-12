@@ -10,7 +10,7 @@ const LiveTracking = () => {
   const [emergencyContacts, setEmergencyContacts] = useState([]);
   const [showAddContact, setShowAddContact] = useState(false);
   const [newContact, setNewContact] = useState({
-    name: '',
+    name: '',      
     phone: '',
     relation: ''
   });
@@ -22,7 +22,7 @@ const LiveTracking = () => {
   const [nearbyPolice, setNearbyPolice] = useState([
     { name: 'Tejgaon Police Station', distance: '0.8 km' },
     { name: 'Gulshan Police Station', distance: '1.5 km' },
-    { name: 'Banani Police Station', distance: '2.1 km' }
+    { name: 'Banani Police Station', distance: '2.1 km' }   
   ]);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const LiveTracking = () => {
           console.error('Error getting location:', error);
           // Set default location (BRAC University)
           setLocation({ lat: 23.8103, lng: 90.4125 });
-        }
+        }  
       );
     }
 
@@ -64,7 +64,7 @@ const LiveTracking = () => {
 
     try {
       const updatedContacts = [...emergencyContacts, newContact];
-      await axios.put(`${process.env.REACT_APP_API_URL}/users/profile`, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/users/profile`, {  
         emergencyContacts: updatedContacts
       });
       setEmergencyContacts(updatedContacts);
@@ -94,7 +94,7 @@ const LiveTracking = () => {
                   <iframe
                     title="Live Location Map"
                     className="w-full h-full"
-                    loading="lazy"
+                    loading="lazy"  
                     allowFullScreen
                     referrerPolicy="no-referrer-when-downgrade"
                     src={`https://www.google.com/maps?q=${location.lat},${location.lng}&hl=en&z=15&output=embed&markers=color:red%7Clabel:S%7C${location.lat},${location.lng}`}
@@ -129,7 +129,7 @@ const LiveTracking = () => {
             {/* Emergency Proximity */}
             <div className="space-y-4">
               <div className="bg-white/5 rounded-xl p-6">
-                <h2 className="text-xl font-bold text-white mb-4">Emergency Proximity</h2>
+                <h2 className="text-xl font-bold text-white mb-4">Emergency Proximity</h2> 
 
                 {/* Hospitals */}
                 <div className="mb-4">
@@ -152,7 +152,7 @@ const LiveTracking = () => {
                   {nearbyPolice.map((station, index) => (
                     <div key={index} className="flex justify-between items-center p-2 bg-white/5 rounded-lg mb-2">
                       <span className="text-sm text-gray-300">{station.name}</span>
-                      <span className="text-xs text-gray-500">{station.distance}</span>
+                      <span className="text-xs text-gray-500">{station.distance}</span> 
                     </div>
                   ))}
                 </div>
@@ -190,7 +190,7 @@ const LiveTracking = () => {
                     ))
                   ) : (
                     <p className="text-gray-400 text-sm">No emergency contacts added</p>
-                  )}
+                  )} 
                 </div>
               </div>
             </div>
@@ -201,7 +201,7 @@ const LiveTracking = () => {
       {/* Add Contact Modal */}
       {showAddContact && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-sos-gray rounded-2xl p-6 max-w-md w-full">
+          <div className="bg-sos-gray rounded-2xl p-6 max-w-md w-full">  
             <h3 className="text-xl font-bold text-white mb-4">Add Emergency Contact</h3>
             
             <div className="space-y-4">
