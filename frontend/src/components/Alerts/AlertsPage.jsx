@@ -5,7 +5,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import SOSButton from './SOSButton';
 
-const AlertsPage = () => {
+const AlertsPage = () => {     
   const { user } = useAuth();
   const [isSOSActive, setIsSOSActive] = useState(false);
   const [primaryHelpers, setPrimaryHelpers] = useState([]);
@@ -22,7 +22,7 @@ const AlertsPage = () => {
 
   const fetchPrimaryHelpers = async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/users/primary-helpers`);
+      const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/users/primary-helpers`);  
       setPrimaryHelpers(data);
     } catch (error) {
       console.error('Error fetching helpers:', error);
@@ -30,7 +30,7 @@ const AlertsPage = () => {
   };
 
   const fetchWalletBalance = async () => {
-    try {
+    try {  
       const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/payment/wallet`);
       setWalletBalance(data.balance || 0);
     } catch (error) {
