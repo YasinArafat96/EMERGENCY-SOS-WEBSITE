@@ -1,6 +1,6 @@
-<<<<<<< HEAD
+
 # EMERGENCY-SOS-WEBSITE
-=======
+
 # 🚨 Emergency SOS Alert System
 
 A full-stack emergency alert system where users can send SOS alerts, get help from nearby helpers, chat, book blood donations, find hospitals/police, and manage emergency payments.
