@@ -24,6 +24,11 @@ const ChatSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
     },
+    isUnsent: {
+      type: Boolean,
+      default: false,
+    },
+    unsentAt: Date,
   }],
   lastMessage: {
     content: String,
