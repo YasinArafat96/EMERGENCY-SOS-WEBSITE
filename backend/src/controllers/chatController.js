@@ -22,12 +22,12 @@ exports.getOrCreateChat = async (req, res) => {
 
     await chat.populate(
       'participants',
-      'name userId isOnline'
+      'name userId isOnline avatar'
     );
 
     await chat.populate(
       'messages.senderId',
-      'name userId'
+      'name userId avatar'
     );
 
     res.json(chat);
@@ -267,5 +267,91 @@ exports.markMessagesRead = async (req, res) => {
     res.status(500).json({
       message: 'Server error',
     });
+  }
+};
+
+exports.unsendMessage = async (req, res) => {
+  try {
+    const { chatId, messageId } = req.params;
+
+    const chat = await Chat.findById(chatId);
+
+    if (!chat) {
+      return res.status(404).json({ message: 'Chat not found' });
+    }
+
+    const isParticipant = chat.participants.some(
+      (participantId) =>
+        participantId.toString() === req.user._id.toString()
+    );
+
+    if (!isParticipant) {
+      return res.status(403).json({ message: 'You are not a participant of this chat' });
+    }
+
+    const message = chat.messages.id(messageId);
+
+    if (!message) {
+      return res.status(404).json({ message: 'Message not found' });
+    }
+
+    if (message.senderId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'You can only unsend your own messages' });
+    }
+
+    if (message.isUnsent) {
+      return res.status(400).json({ message: 'Message already unsent' });
+    }
+
+    const UNSEND_TIME_LIMIT = 60 * 60 * 1000; // 1 hour
+    const messageAge = Date.now() - new Date(message.timestamp).getTime();
+    if (messageAge > UNSEND_TIME_LIMIT) {
+      return res.status(400).json({ message: 'Cannot unsend messages older than 1 hour' });
+    }
+
+    message.isUnsent = true;
+    message.unsentAt = new Date();
+
+    const lastNonUnsent = [...chat.messages]
+      .reverse()
+      .find((m) => !m.isUnsent);
+
+    if (lastNonUnsent) {
+      chat.lastMessage = {
+        content:
+          lastNonUnsent.type === 'image'
+            ? '📷 Image'
+            : lastNonUnsent.type === 'file'
+            ? '📎 File'
+            : lastNonUnsent.content,
+        timestamp: lastNonUnsent.timestamp,
+      };
+    } else {
+      chat.lastMessage = {
+        content: 'Message unsent',
+        timestamp: new Date(),
+      };
+    }
+
+    await chat.save();
+
+    const io = getIO();
+    chat.participants.forEach((participantId) => {
+      if (participantId.toString() !== req.user._id.toString()) {
+        io.to(`user-${participantId}`).emit('message-unsent', {
+          chatId: chat._id.toString(),
+          messageId: message._id.toString(),
+        });
+      }
+    });
+
+    res.json({
+      message: 'Message unsent',
+      messageId: message._id,
+      isUnsent: true,
+    });
+  } catch (error) {
+    console.error('Unsend message error:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
