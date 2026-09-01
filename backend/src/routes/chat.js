@@ -14,6 +14,7 @@ const {
   uploadMessageFile,
   getUserChats,
   markMessagesRead,
+  unsendMessage,
 } = require('../controllers/chatController');
 
 router.get('/', protect, getUserChats);
@@ -42,6 +43,12 @@ router.put(
   '/:chatId/read',
   protect,
   markMessagesRead
+);
+
+router.put(
+  '/:chatId/messages/:messageId/unsend',
+  protect,
+  unsendMessage
 );
 
 module.exports = router;
